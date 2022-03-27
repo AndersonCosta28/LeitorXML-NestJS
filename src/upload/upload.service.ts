@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import decompress from 'decompress'
 import { join } from 'path';
 import constantsUtils from 'src/constants.utils';
@@ -8,7 +8,7 @@ const { rota_upload, rota_extraido } = constantsUtils
 
 @Injectable()
 export class UploadService {
-    constructor(private xmlService: XmlService){}
+    constructor(private xmlService: XmlService) { }
     async descompactar(nomeArquivo: string) {
         try {
             const [nome, extensao] = nomeArquivo.split('.')
@@ -16,7 +16,8 @@ export class UploadService {
             return this.xmlService.gerarRelatorio(nome);
         }
         catch (e) {
-            console.error(e)
+            console.log(e)
+            throw e
         }
     }
 }
