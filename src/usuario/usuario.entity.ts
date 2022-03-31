@@ -32,16 +32,16 @@ export class Usuario {
     atualizado_em: Date;
 
     @BeforeInsert()
-    async insertToUpperCase() {
-        const salt = await bcrypt.genSalt();
-        this.senha = await bcrypt.hash(this.senha, salt);
+    insertToUpperCase() {
+        const salt = bcrypt.genSaltSync(10);
+        this.senha = bcrypt.hashSync(this.senha, salt);
         this.usuario = this.usuario.toUpperCase().trim()
     }
 
     @BeforeUpdate()
-    async updateToUpperCase() {
-        const salt = await bcrypt.genSalt();
-        this.senha = await bcrypt.hash(this.senha, salt);
-        this.usuario = this.usuario.toUpperCase().trim()
+    updateToUpperCase() {
+        const salt = bcrypt.genSaltSync(10);
+        this.senha = bcrypt.hashSync(this.senha, salt);
+        this.usuario = this.usuario.toUpperCase().trim()        
     }
 }
