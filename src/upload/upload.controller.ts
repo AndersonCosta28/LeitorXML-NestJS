@@ -13,7 +13,6 @@ export class UploadController {
     @Post()
     @UseInterceptors(FileInterceptor('file', { storage: diskStorage({ destination: rotaArquivoUpload, filename: nomeArquivo }), fileFilter: filtroArquivo }))
     uploadFile(@UploadedFile() file: Express.Multer.File): Promise<Object> {
-        console.log(file);
         return this.uploadService.descompactar(file.filename);
     }
 }

@@ -1,15 +1,13 @@
 import { XmlService } from './xml.service';
-/*
-https://docs.nestjs.com/modules
-*/
-
 import { Module } from '@nestjs/common';
 import { XmlController } from './xml.controller';
+import { XmlParse } from './xml-parse.util';
+import { XmlReports } from './xml-reports.utils';
 
 @Module({
     imports: [],
     controllers: [XmlController],
-    providers: [XmlService],
+    providers: [XmlService, XmlParse, XmlReports],
     exports: [XmlService]
 })
 export class XmlModule { }

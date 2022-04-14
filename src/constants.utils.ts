@@ -7,9 +7,10 @@ export default {
     rota_upload: join(currentDir, 'src/upload/uploaded_file'),
     rota_extraido: join(currentDir, 'src/upload/uncompressed_files'),
     rota_arquivo_extraido: (nomeArquivo: string): string => join(currentDir, 'src/upload/uncompressed_files', nomeArquivo),
+    rota_arquivo_upado: (nomeArquivo: string): string => join(currentDir, 'src/upload/uploaded_file', nomeArquivo),
     cors: {
         options: {
-            origin: ['https://leitorxml.herokuapp.com', 'http://leitorxml.herokuapp.com', 'leitorxml.herokuapp.com', 'https://leitorxml.herokuapp.com/upload', 'http://leitorxml.herokuapp.com/upload', 'leitorxml.herokuapp.com/upload', 'http://localhost:3000', 'https://localhost:3000'],
+            origin: ['https://leitorxml.herokuapp.com'],
             methods: ['GET', 'PUT', 'POST'],
             preflightContinue: false
         }

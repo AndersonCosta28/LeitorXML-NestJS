@@ -8,7 +8,7 @@ const { rota_upload, rota_extraido } = constantsUtils
 
 @Injectable()
 export class UploadService {
-    constructor(private xmlService: XmlService) { }
+    constructor(private readonly xmlService: XmlService) { }
     async descompactar(nomeArquivo: string) {
         try {
             const [nome, extensao] = nomeArquivo.split('.')
