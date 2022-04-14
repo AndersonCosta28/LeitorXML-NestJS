@@ -10,7 +10,7 @@ export default {
     rota_arquivo_upado: (nomeArquivo: string): string => join(currentDir, 'src/upload/uploaded_file', nomeArquivo),
     cors: {
         options: {
-            origin: ['https://leitorxml.herokuapp.com'],
+            origin: ['https://leitorxml.herokuapp.com', 'http://leitorxml.herokuapp.com'],
             methods: ['GET', 'PUT', 'POST'],
             preflightContinue: false
         }
