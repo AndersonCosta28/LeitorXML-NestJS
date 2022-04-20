@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import constantsUtils from 'src/constants.utils';
 import { XmlParse } from './xml-parse.util';
-import { XmlReports } from './xml-reports.utils';
+import { XmlReports } from './xml-reports.util';
 
 const { rota_arquivo_extraido } = constantsUtils
 

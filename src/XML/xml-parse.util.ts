@@ -26,9 +26,7 @@ export class XmlParse {
 
     private RetornarArquivosValidos(arquivo: string) {
         try { //Se der erro ao no parse, podendo ser algum XML com erro, irá cair no catch
-            console.log(this)
             const json = JSON.parse(convert.xml2json(readFileSync(this.caminho.concat(`/${arquivo}`), 'utf-8'), { compact: true }));
-
             if (readFileSync(this.caminho.concat(`/${arquivo}`), 'utf-8').length <= 2)
                 this.erros.push({ nome: arquivo, motivo: 'Arquivo vazio' })
 
@@ -52,13 +50,16 @@ export class XmlParse {
     //     if (Nfe != null || undefined || NaN) 
     //         return Nfe 
     // }
-    constructor(){
+    // constructor(){
+    //     this.erros = [];
+    //     this.eventos = []
+    //     this.listaXML = [];
+    // }
+
+    public Iniciar(rota: string) {
         this.erros = [];
         this.eventos = []
         this.listaXML = [];
-    }
-
-    public Iniciar(rota: string) {
         this.caminho = rota;        
         this.listaXML =
             readdirSync(this.caminho)

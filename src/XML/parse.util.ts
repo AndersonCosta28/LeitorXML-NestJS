@@ -3,7 +3,7 @@ import { Produto } from "./produto.entity";
 
 function PegarIPI(tributos: any): Number {
     if (tributos.IPI !== undefined) {
-        return tributos.IPI.IPITrib === undefined ? 0 : tributos.IPI.IPITrib.vIPI._text;
+        return tributos.IPI.IPITrib === undefined ? 0 : Number(tributos.IPI.IPITrib.vIPI._text);
     } else {
         return 0
     };
@@ -17,22 +17,22 @@ function PegarItens(ListaDeProdutos: any): Array<Produto> {
         let tributos = listaprod[i].imposto;
         let tributos_icms = tributos.ICMS[icms]
         let cstcsosn = tributos_icms.CSOSN !== undefined ? tributos_icms.CSOSN._text : tributos_icms.CST._text;
-        let vDesc = produto.vDesc != undefined ? produto.vDesc._text : 0;
-        let vBC = tributos_icms.vBC !== undefined ? tributos_icms.vBC._text : 0;
-        let picms = tributos_icms.pICMS !== undefined ? tributos_icms.pICMS._text : 0;
-        let vicms = tributos_icms.vICMS !== undefined ? tributos_icms.vICMS._text : 0;
-        let vicmsST = tributos_icms.vICMSST !== undefined ? tributos_icms.vICMSST._text : 0;
-        let vOutro = produto.vOutro !== undefined ? produto.vOutro._text : 0;
-        let vFrete = produto.vFrete !== undefined ? produto.vFrete._text : 0;
-        let CFOP = produto.CFOP !== undefined ? produto.CFOP._text : 0;
+        let vDesc = produto.vDesc != undefined ? Number(produto.vDesc._text) : 0;
+        let vBC = tributos_icms.vBC !== undefined ? Number(tributos_icms.vBC._text) : 0;
+        let picms = tributos_icms.pICMS !== undefined ? Number(tributos_icms.pICMS._text) : 0;
+        let vicms = tributos_icms.vICMS !== undefined ? Number(tributos_icms.vICMS._text) : 0;
+        let vicmsST = tributos_icms.vICMSST !== undefined ? Number(tributos_icms.vICMSST._text) : 0;
+        let vOutro = produto.vOutro !== undefined ? Number(produto.vOutro._text) : 0;
+        let vFrete = produto.vFrete !== undefined ? Number(produto.vFrete._text) : 0;
+        let CFOP = produto.CFOP !== undefined ? Number(produto.CFOP._text) : 0;
         let ipi = PegarIPI(tributos)
         let descricao = String(produto.xProd._text).replace('"', '');
-        let vProd = produto.vProd._text;
+        let vProd = Number(produto.vProd._text);
         let NCM = produto.NCM._text;
         let CodigoBarras = produto.cEAN._text;
         let embalagem = produto.uCom._text;
-        let quantidade = produto.qCom._text;
-        let valorUnitario = produto.vUnCom._text
+        let quantidade = Number(produto.qCom._text);
+        let valorUnitario = Number(produto.vUnCom._text)
         novalista.push({ produto, tributos, icms, tributos_icms, cstcsosn, vDesc, vBC, picms, vicms, vicmsST, vOutro, vFrete, CFOP, descricao, ipi, vProd, NCM, CodigoBarras, embalagem, quantidade, valorUnitario })
     }
     return novalista

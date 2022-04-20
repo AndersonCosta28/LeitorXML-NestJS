@@ -75,7 +75,7 @@ export class XmlReports {
                 nota.produto.forEach(produto => {
                     todos_produtos.push({
                         CFOP: produto.CFOP,
-                        valor_total: produto.vProd + produto.ipi + produto.vicmsST + produto.vOutro + produto.vFrete - produto.vDesc,
+                        valor_total: produto.vProd + produto.ipi + produto.vicmsST + produto.vOutro + produto.vFrete - produto.vDesc, //Number(produto.vProd) + Number(produto.ipi) + Number(produto.vicmsST) + Number(produto.vOutro) + Number(produto.vFrete) - Number(produto.vDesc),
                         ICMS: produto.vicms
                     })
                 })
@@ -96,11 +96,10 @@ export class XmlReports {
         const { certos, erros, eventos } = ArrayXML
         this.listaXML = certos;
         this.listaXMLerros = erros;
-        this.listaXMLEventos = eventos
-            ;
+        this.listaXMLEventos = eventos;
         return new Promise((resolve, rejects) => {
             Promise.all([this.Soma_Dia(), this.Todas_As_Notas(), this.Total(), this.Soma_CFOP(), this.total_de_erros(), this.Todos_Os_Eventos()])
-                .then(result => { console.log(result); resolve(result) })
+                .then(result => resolve(result))
                 .catch(error => {
                     if (error == 'TypeError: Reduce of empty array with no initial value') {
                         rejects(new HttpException('Arquivo inválido, verifique se todos há algum XML válido para operação, em caso de dúvida descompacte e compacte novamente para importação', 500))
