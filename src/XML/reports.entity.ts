@@ -20,6 +20,8 @@ export interface total{
     substituicao: number; 
     desconto: number; 
     ipi: number;
+    ipidevolvido: number;
+    valor_dos_produtos: number;
 }
 
 export interface erro{

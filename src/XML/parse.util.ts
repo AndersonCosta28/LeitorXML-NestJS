@@ -8,6 +8,14 @@ function PegarIPI(tributos: any): Number {
         return 0
     };
 }
+
+function PegarIPIDevolvido(tributos: any) : number{
+    if (tributos.impostoDevol !== undefined) {
+        return tributos.impostoDevol.IPI.vIPIDevol === undefined ? 0 : Number(tributos.impostoDevol.IPI.vIPIDevol._text);
+    } else {
+        return 0
+    };
+}
 function PegarItens(ListaDeProdutos: any): Array<Produto> {
     const listaprod = ListaDeProdutos[0].imposto !== undefined ? ListaDeProdutos : ListaDeProdutos[0]; // Encontrando em qual o "Body" podemos extrair os produtos
     const novalista = []
@@ -26,6 +34,7 @@ function PegarItens(ListaDeProdutos: any): Array<Produto> {
         let vFrete = produto.vFrete !== undefined ? Number(produto.vFrete._text) : 0;
         let CFOP = produto.CFOP !== undefined ? Number(produto.CFOP._text) : 0;
         let ipi = PegarIPI(tributos)
+        let ipidevolvido = PegarIPIDevolvido(listaprod[i])
         let descricao = String(produto.xProd._text).replace('"', '');
         let vProd = Number(produto.vProd._text);
         let NCM = produto.NCM._text;
@@ -33,30 +42,34 @@ function PegarItens(ListaDeProdutos: any): Array<Produto> {
         let embalagem = produto.uCom._text;
         let quantidade = Number(produto.qCom._text);
         let valorUnitario = Number(produto.vUnCom._text)
-        novalista.push({ produto, tributos, icms, tributos_icms, cstcsosn, vDesc, vBC, picms, vicms, vicmsST, vOutro, vFrete, CFOP, descricao, ipi, vProd, NCM, CodigoBarras, embalagem, quantidade, valorUnitario })
+        novalista.push({ produto, tributos, icms, tributos_icms, cstcsosn, vDesc, vBC, picms, vicms, vicmsST, vOutro, vFrete, CFOP, descricao, ipi, vProd, NCM, CodigoBarras, embalagem, quantidade, valorUnitario, ipidevolvido })
     }
     return novalista
 }
 export function PegarCapa(json: any): Nfe {
+    const Total = json.nfeProc.NFe.infNFe.total.ICMSTot;
+    const IDE = json.nfeProc.NFe.infNFe.ide;
     return {
-        numero: parseInt(json.nfeProc.NFe.infNFe.ide.nNF._text),
-        modelo: parseInt(json.nfeProc.NFe.infNFe.ide.mod._text),
-        serie: parseInt(json.nfeProc.NFe.infNFe.ide.serie._text),
+        numero: parseInt(IDE.nNF._text),
+        modelo: parseInt(IDE.mod._text),
+        serie: parseInt(IDE.serie._text),
         chave: (json.nfeProc.protNFe.infProt.chNFe._text),
-        valor: parseFloat(json.nfeProc.NFe.infNFe.total.ICMSTot.vNF._text),
+        valor_dos_produtos: parseFloat(Total.vProd._text),
+        valor_total: parseFloat(Total.vNF._text),
         data: new Date(String(json.nfeProc.protNFe.infProt.dhRecbto._text).trim()).toLocaleDateString('pt-BR'),
         status: json.nfeProc.protNFe.infProt.cStat._text,
-        IPI: parseFloat(json.nfeProc.NFe.infNFe.total.ICMSTot.vIPI._text),
-        vOutro: parseFloat(json.nfeProc.NFe.infNFe.total.ICMSTot.vOutro._text),
-        vFrete: parseFloat(json.nfeProc.NFe.infNFe.total.ICMSTot.vFrete._text),
-        vBCST: parseFloat(json.nfeProc.NFe.infNFe.total.ICMSTot.vBCST._text),
-        vST: parseFloat(json.nfeProc.NFe.infNFe.total.ICMSTot.vST._text),
-        vBC: parseFloat(json.nfeProc.NFe.infNFe.total.ICMSTot.vBC._text),
-        vICMS: parseFloat(json.nfeProc.NFe.infNFe.total.ICMSTot.vICMS._text),
-        vPIS: parseFloat(json.nfeProc.NFe.infNFe.total.ICMSTot.vPIS._text),
-        vCOFINS: parseFloat(json.nfeProc.NFe.infNFe.total.ICMSTot.vCOFINS._text),
-        vTotTrib: json.nfeProc.NFe.infNFe.total.ICMSTot.vTotTrib !== undefined ? parseFloat(json.nfeProc.NFe.infNFe.total.ICMSTot.vTotTrib._text) : 0,
-        desconto: parseFloat(json.nfeProc.NFe.infNFe.total.ICMSTot.vDesc._text),
+        IPI: parseFloat(Total.vIPI._text),
+        IPIdevolvido: parseFloat(Total.vIPIDevol._text),
+        vOutro: parseFloat(Total.vOutro._text),
+        vFrete: parseFloat(Total.vFrete._text),
+        vBCST: parseFloat(Total.vBCST._text),
+        vST: parseFloat(Total.vST._text),
+        vBC: parseFloat(Total.vBC._text),
+        vICMS: parseFloat(Total.vICMS._text),
+        vPIS: parseFloat(Total.vPIS._text),
+        vCOFINS: parseFloat(Total.vCOFINS._text),
+        vTotTrib: Total.vTotTrib !== undefined ? parseFloat(Total.vTotTrib._text) : 0,
+        desconto: parseFloat(Total.vDesc._text),
         data_recebimento: new Date(String(json.nfeProc.protNFe.infProt.dhRecbto._text).trim()),
         produto: PegarItens(Array(json.nfeProc.NFe.infNFe.det)),
         emitente: json.nfeProc.NFe.infNFe.emit.CNPJ._text

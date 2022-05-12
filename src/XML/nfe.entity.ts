@@ -5,10 +5,12 @@ export class Nfe {
     modelo: number;
     serie: number;
     chave: number;
-    valor: number;
+    valor_total: number;
+    valor_dos_produtos: number;
     data: String;
     status: String;
     IPI: number;
+    IPIdevolvido: number;
     vOutro: number;
     vFrete: number;
     vBCST: number;

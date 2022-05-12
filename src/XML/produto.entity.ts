@@ -14,6 +14,7 @@ export class Produto {
     CFOP: number;
     descricao: String;
     ipi: number;
+    ipidevolvido: number;
     vProd: number;
     NCM: String;
     CodigoBarras: String;

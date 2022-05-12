@@ -1,4 +1,5 @@
 import { HttpException } from "@nestjs/common";
+import { appendFileSync, writeFileSync } from "fs";
 import constantsUtils from "src/constants.utils";
 import { Evento } from "./evento.entity";
 import { Nfe } from "./nfe.entity";
@@ -19,7 +20,7 @@ export class XmlReports {
             ({
                 data: dia,
                 total: this.listaXML.filter(nota => { if (dia == nota.data) return nota })
-                    .map(nota => nota.valor)
+                    .map(nota => nota.valor_total)
                     .reduce(somatorio),
 
                 quantidade: this.listaXML.filter(nota => { if (dia == nota.data) return nota }).length
@@ -45,7 +46,7 @@ export class XmlReports {
     }
 
 
-    total_de_erros(): Promise<Array<erro>> {
+    Total_de_erros(): Promise<Array<erro>> {
         return new Promise((resolve, rejects) => {
             console.log('Função: total_de_erros - OK')
             resolve(this.listaXMLerros)
@@ -54,31 +55,42 @@ export class XmlReports {
 
     Total(): Promise<total> {
         return new Promise((resolve, rejects) => {
-            const total = this.listaXML.map(a => a.valor).reduce(somatorio);
-            const icms = this.listaXML.map(a => a.vICMS).reduce(somatorio);
-            const outro = this.listaXML.map(a => a.vOutro).reduce(somatorio);
-            const frete = this.listaXML.map(a => a.vFrete).reduce(somatorio);
-            const desconto = this.listaXML.map(a => a.desconto).reduce(somatorio);
-            const substituicao = this.listaXML.map(a => a.vST).reduce(somatorio);
-            const ipi = this.listaXML.map(a => a.IPI).reduce(somatorio);
+            const total = this.listaXML.map(nota => nota.valor_total).reduce(somatorio);
+            const valor_dos_produtos = this.listaXML.map(nota => nota.valor_dos_produtos).reduce(somatorio);
+            const icms = this.listaXML.map(nota => nota.vICMS).reduce(somatorio);
+            const outro = this.listaXML.map(nota => nota.vOutro).reduce(somatorio);
+            const frete = this.listaXML.map(nota => nota.vFrete).reduce(somatorio);
+            const desconto = this.listaXML.map(nota => nota.desconto).reduce(somatorio);
+            const substituicao = this.listaXML.map(nota => nota.vST).reduce(somatorio);
+            const ipi = this.listaXML.map(nota => nota.IPI).reduce(somatorio);
+            const ipidevolvido = this.listaXML.map(nota => nota.IPIdevolvido).reduce(somatorio);
             const quantidade = this.listaXML.length;
+            
             console.log('Função: Total - OK')
-            resolve({ total, quantidade, icms, outro, frete, substituicao, desconto, ipi })
+            resolve({ total, quantidade, icms, outro, frete, substituicao, desconto, ipi, ipidevolvido, valor_dos_produtos })
         })
     };
 
     Soma_CFOP(): Promise<Array<soma_por_CFOP>> {
+        writeFileSync('./itens.txt', '');
         return new Promise((resolve, rejects) => {
             const todos_produtos = []
             const soma_por_CFOP = []
             this.listaXML.forEach(nota => {
+                let ValorItens = 0;
                 nota.produto.forEach(produto => {
+                    ValorItens += produto.vProd + produto.ipi + produto.vicmsST + produto.vOutro + produto.vFrete + produto.ipidevolvido - produto.vDesc;
+                    //appendFileSync('./itens.txt', `${produto.vProd }- ${produto.ipi} - ${produto.vicmsST} - ${produto.vOutro} - ${produto.vFrete} ${produto.vDesc} \n`)
                     todos_produtos.push({
                         CFOP: produto.CFOP,
-                        valor_total: produto.vProd + produto.ipi + produto.vicmsST + produto.vOutro + produto.vFrete - produto.vDesc, //Number(produto.vProd) + Number(produto.ipi) + Number(produto.vicmsST) + Number(produto.vOutro) + Number(produto.vFrete) - Number(produto.vDesc),
+                        valor_total: produto.vProd + produto.ipi + produto.vicmsST + produto.vOutro + produto.vFrete + produto.ipidevolvido, //Number(produto.vProd) + Number(produto.ipi) + Number(produto.vicmsST) + Number(produto.vOutro) + Number(produto.vFrete) - Number(produto.vDesc),
                         ICMS: produto.vicms
                     })
+                    if (produto.ipidevolvido)
+                        console.log(produto.ipidevolvido);
                 })
+
+                appendFileSync('./itens.txt', `${ValorItens.toFixed(2) == (nota.valor_total).toFixed(2) ? 'true' : 'false'} Itens: ${ValorItens.toFixed(2)} - Capa: ${(nota.valor_total).toFixed(2)} -> ${nota.chave} \n`)
             })
             const t = Object.values(todos_produtos)
             const unique = [...new Set(t.map(item => item.CFOP))];
@@ -98,7 +110,7 @@ export class XmlReports {
         this.listaXMLerros = erros;
         this.listaXMLEventos = eventos;
         return new Promise((resolve, rejects) => {
-            Promise.all([this.Soma_Dia(), this.Todas_As_Notas(), this.Total(), this.Soma_CFOP(), this.total_de_erros(), this.Todos_Os_Eventos()])
+            Promise.all([this.Soma_Dia(), this.Todas_As_Notas(), this.Total(), this.Soma_CFOP(), this.Total_de_erros(), this.Todos_Os_Eventos()])
                 .then(result => resolve(result))
                 .catch(error => {
                     if (error == 'TypeError: Reduce of empty array with no initial value') {
