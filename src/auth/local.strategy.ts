@@ -18,7 +18,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
       throw new UnauthorizedException();
     }
     else if(user.ativo == false){
-      throw new ForbiddenException()
+      throw new ForbiddenException('Usuário Inativo.')
     }
     return user;
   }
