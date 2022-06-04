@@ -114,7 +114,7 @@ export class XmlReports {
                 .then(result => resolve(result))
                 .catch(error => {
                     if (error == 'TypeError: Reduce of empty array with no initial value') {
-                        rejects(new HttpException('Arquivo inválido, verifique se todos há algum XML válido para operação, em caso de dúvida descompacte e compacte novamente para importação', 500))
+                        rejects(new HttpException('Arquivo inválido, verifique se todos há algum XML válido para operação, em caso de dúvida descompacte e compacte novamente para importação.', 500))
                     }
                     else
                         rejects(error)
