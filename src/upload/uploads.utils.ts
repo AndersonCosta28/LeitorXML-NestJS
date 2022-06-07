@@ -4,8 +4,8 @@ import constantsUtils from 'src/constants.utils';
 const { rota_upload } = constantsUtils
 
 export const nomeArquivo = (req, file, callback) => {    
-    callback(null,`XMLs${extname(file.originalname)}`)
-    //callback(null,`XMLs${Date.now().toString().concat(extname(file.originalname))}`) // Sempre gerar um arquivo diferente
+    //callback(null,`XMLs${extname(file.originalname)}`)
+    callback(null,`XMLs${Date.now().toString().concat(extname(file.originalname))}`) // Sempre gerar um arquivo diferente
 }
 
 export const rotaArquivoUpload = rota_upload;

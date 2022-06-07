@@ -4,7 +4,7 @@ import constantsUtils from "src/constants.utils";
 import { Evento } from "./evento.entity";
 import { Nfe } from "./nfe.entity";
 import { erro, soma_dia, soma_por_CFOP, total } from "./reports.entity";
-import { recriar_pastas } from "./xml.util";
+
 
 const somatorio = (acumulador = 0, atual = 0) => acumulador + atual;
 const { rota_extraido, rota_upload } = constantsUtils
@@ -65,7 +65,7 @@ export class XmlReports {
             const ipi = this.listaXML.map(nota => nota.IPI).reduce(somatorio);
             const ipidevolvido = this.listaXML.map(nota => nota.IPIdevolvido).reduce(somatorio);
             const quantidade = this.listaXML.length;
-            
+
             console.log('Função: Total - OK')
             resolve({ total, quantidade, icms, outro, frete, substituicao, desconto, ipi, ipidevolvido, valor_dos_produtos })
         })
@@ -118,10 +118,6 @@ export class XmlReports {
                     }
                     else
                         rejects(error)
-                })
-                .finally(() => {
-                    recriar_pastas(rota_extraido)
-                    recriar_pastas(rota_upload)
                 })
         })
     }
