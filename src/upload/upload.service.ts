@@ -2,7 +2,7 @@ import { HttpException, Injectable } from '@nestjs/common';
 import decompress from 'decompress'
 import { rm } from 'fs';
 import { join } from 'path';
-import constantsUtils from 'src/constants.utils';
+import constantsUtils from 'src/utils/constants.utils';
 import { XmlService } from 'src/XML/xml.service';
 const { rota_upload, rota_extraido } = constantsUtils
 

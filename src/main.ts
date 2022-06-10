@@ -2,9 +2,8 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
-import constantsUtils from './constants.utils';
+import constantsUtils from './utils/constants.utils';
 import { recriar_pastas } from './XML/xml.util';
-
 const { rota_extraido, rota_upload } = constantsUtils
 
 async function bootstrap() {
@@ -15,6 +14,7 @@ async function bootstrap() {
 
   app.enableCors(cors.options)
   app.useGlobalPipes(new ValidationPipe());
+  app.use(require('express-status-monitor')());
 
   SwaggerModule.setup('api', app, document);
 

@@ -1,5 +1,5 @@
-import { Nfe } from "./nfe.entity";
-import { Produto } from "./produto.entity";
+import { Nfe } from "./Entity/nfe.entity";
+import { Produto } from "./Entity/produto.entity";
 
 function PegarIPI(tributos: any): Number {
     if (tributos.IPI !== undefined) {

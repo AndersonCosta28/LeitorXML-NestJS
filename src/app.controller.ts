@@ -4,10 +4,16 @@ import { LocalAuthGuard } from './auth/local-auth.guard';
 import { AuthService } from './auth/auth.service';
 import { ApiBearerAuth, ApiBody, ApiOperation } from '@nestjs/swagger';
 import { Usuario } from './usuario/usuario.entity';
+import { AppService } from './app.service';
 
 @Controller()
 export class AppController {
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService, private appService: AppService) { }
+
+  @Get()
+  HelloWorld(){
+    return this.appService.getHello();
+  }
 
   @UseGuards(LocalAuthGuard)
   @ApiBody({ type: Usuario })

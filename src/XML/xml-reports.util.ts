@@ -1,13 +1,10 @@
 import { HttpException } from "@nestjs/common";
 import { appendFileSync, writeFileSync } from "fs";
-import constantsUtils from "src/constants.utils";
-import { Evento } from "./evento.entity";
-import { Nfe } from "./nfe.entity";
-import { erro, soma_dia, soma_por_CFOP, total } from "./reports.entity";
-
+import { Evento } from "./Entity/evento.entity";
+import { Nfe } from "./Entity/nfe.entity";
+import { erro, soma_dia, soma_por_CFOP, total } from "./Entity/reports.entity";
 
 const somatorio = (acumulador = 0, atual = 0) => acumulador + atual;
-const { rota_extraido, rota_upload } = constantsUtils
 
 export class XmlReports {
     listaXML: Array<Nfe>;
@@ -45,7 +42,6 @@ export class XmlReports {
         })
     }
 
-
     Total_de_erros(): Promise<Array<erro>> {
         return new Promise((resolve, rejects) => {
             console.log('Função: total_de_erros - OK')
@@ -77,20 +73,15 @@ export class XmlReports {
             const todos_produtos = []
             const soma_por_CFOP = []
             this.listaXML.forEach(nota => {
-                let ValorItens = 0;
                 nota.produto.forEach(produto => {
-                    ValorItens += produto.vProd + produto.ipi + produto.vicmsST + produto.vOutro + produto.vFrete + produto.ipidevolvido - produto.vDesc;
-                    //appendFileSync('./itens.txt', `${produto.vProd }- ${produto.ipi} - ${produto.vicmsST} - ${produto.vOutro} - ${produto.vFrete} ${produto.vDesc} \n`)
                     todos_produtos.push({
                         CFOP: produto.CFOP,
-                        valor_total: produto.vProd + produto.ipi + produto.vicmsST + produto.vOutro + produto.vFrete + produto.ipidevolvido, //Number(produto.vProd) + Number(produto.ipi) + Number(produto.vicmsST) + Number(produto.vOutro) + Number(produto.vFrete) - Number(produto.vDesc),
+                        valor_total: produto.vProd + produto.ipi + produto.vicmsST + produto.vOutro + produto.vFrete + produto.ipidevolvido,
                         ICMS: produto.vicms
                     })
                     if (produto.ipidevolvido)
                         console.log(produto.ipidevolvido);
                 })
-
-                appendFileSync('./itens.txt', `${ValorItens.toFixed(2) == (nota.valor_total).toFixed(2) ? 'true' : 'false'} Itens: ${ValorItens.toFixed(2)} - Capa: ${(nota.valor_total).toFixed(2)} -> ${nota.chave} \n`)
             })
             const t = Object.values(todos_produtos)
             const unique = [...new Set(t.map(item => item.CFOP))];
@@ -104,6 +95,7 @@ export class XmlReports {
             resolve(soma_por_CFOP)
         })
     }
+    
     GerarRelatorio(ArrayXML: any) {
         const { certos, erros, eventos } = ArrayXML
         this.listaXML = certos;
@@ -122,4 +114,3 @@ export class XmlReports {
         })
     }
 }
-

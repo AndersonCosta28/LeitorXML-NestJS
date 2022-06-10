@@ -1,5 +1,5 @@
 import { extname, join } from 'path';
-import constantsUtils from 'src/constants.utils';
+import constantsUtils from 'src/utils/constants.utils';
 
 const { rota_upload } = constantsUtils
 

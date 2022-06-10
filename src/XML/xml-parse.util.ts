@@ -1,9 +1,9 @@
 import { readdirSync, readFileSync } from 'fs';
 import convert from 'xml-js';
-import { Evento } from './evento.entity';
-import { Nfe } from './nfe.entity';
+import { Evento } from './Entity/evento.entity';
+import { Nfe } from './Entity/nfe.entity';
 import { PegarCapa, PegarInfoEvento } from './parse.util';
-import { erro } from './reports.entity';
+import { erro } from './Entity/reports.entity';
 
 export class XmlParse {
     private caminho: string;
@@ -24,7 +24,7 @@ export class XmlParse {
         }
     }
 
-    private RetornarArquivosValidos(arquivo: string) {
+    private RetornarArquivosValidos(arquivo: string): Buffer {
         try { //Se der erro ao no parse, podendo ser algum XML com erro, irá cair no catch
             const json = JSON.parse(convert.xml2json(readFileSync(this.caminho.concat(`/${arquivo}`), 'utf-8'), { compact: true }));
             if (readFileSync(this.caminho.concat(`/${arquivo}`), 'utf-8').length <= 2)
@@ -60,7 +60,7 @@ export class XmlParse {
         this.erros = [];
         this.eventos = []
         this.listaXML = [];
-        this.caminho = rota;        
+        this.caminho = rota;
         this.listaXML =
             readdirSync(this.caminho)
                 .filter(this.RetornarArquivosValidos.bind(this))
@@ -72,6 +72,5 @@ export class XmlParse {
             erros: this.erros != undefined ? this.erros : [],
             eventos: this.eventos != undefined ? this.eventos : []
         }
-
     }
 }
