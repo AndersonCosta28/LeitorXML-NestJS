@@ -2,7 +2,7 @@ import { DocumentBuilder } from "@nestjs/swagger";
 import { dirname, join } from "path"
 
 const currentDir = dirname('./')
-export default {
+const constantsUtils =  {
     rota_raiz: currentDir,
     rota_upload: join(currentDir, 'src/upload/uploaded_file'),
     rota_extraido: join(currentDir, 'src/upload/uncompressed_files'),
@@ -26,3 +26,4 @@ export default {
         }
     }
 }
+export default constantsUtils;

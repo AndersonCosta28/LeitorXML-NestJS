@@ -1,17 +1,17 @@
-export interface soma_dia {
+export interface ISoma_dia {
     data: String;
     total: number;
     quantidade: number;
 }
 
-export interface soma_por_CFOP {
+export interface ISoma_por_CFOP {
     cfop: number; 
     total: number; 
     quantidade: number; 
     icms: number
 }
 
-export interface total{
+export interface ITotal{
     total: number; 
     quantidade: number; 
     icms: number; 
@@ -24,7 +24,7 @@ export interface total{
     valor_dos_produtos: number;
 }
 
-export interface erro{
+export interface IErro{
     nome: string;
     motivo: string;
 }

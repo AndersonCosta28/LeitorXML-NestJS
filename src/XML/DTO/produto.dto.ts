@@ -1,4 +1,4 @@
-export class Produto {
+export interface IProduto {
     produto: Object;
     tributos: Object;
     icms: number;

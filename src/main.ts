@@ -3,7 +3,7 @@ import { NestFactory } from '@nestjs/core';
 import { SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import constantsUtils from './utils/constants.utils';
-import { recriar_pastas } from './XML/xml.util';
+import { recriar_pastas } from './utils/function.utils'; 
 const { rota_extraido, rota_upload } = constantsUtils
 
 async function bootstrap() {

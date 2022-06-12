@@ -21,8 +21,8 @@ export class UploadService {
         }
         finally {
             //console.log(join(rota_upload, nomeArquivo));
-            rm(join(rota_extraido, nome), {recursive: true} ,err => console.log(err))
-            rm(join(rota_upload, nomeArquivo), {recursive: true} ,err => console.log(err))
+            rm(join(rota_extraido, nome), {recursive: true} ,err => console.log("Ocorreu erro para excluir a pasta: ", err))
+            rm(join(rota_upload, nomeArquivo), {recursive: true} ,err => console.log("Ocorreu erro para excluir a pasta: ", err))
         }
     }
 }

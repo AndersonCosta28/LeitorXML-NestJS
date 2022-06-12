@@ -1,5 +1,5 @@
-import { Nfe } from "./Entity/nfe.entity";
-import { Produto } from "./Entity/produto.entity";
+import { INfe } from "../DTO/nfe.dto";
+import { IProduto } from "../DTO/produto.dto";
 
 function PegarIPI(tributos: any): Number {
     if (tributos.IPI !== undefined) {
@@ -16,7 +16,7 @@ function PegarIPIDevolvido(tributos: any) : number{
         return 0
     };
 }
-function PegarItens(ListaDeProdutos: any): Array<Produto> {
+function PegarItens(ListaDeProdutos: any): Array<IProduto> {
     const listaprod = ListaDeProdutos[0].imposto !== undefined ? ListaDeProdutos : ListaDeProdutos[0]; // Encontrando em qual o "Body" podemos extrair os produtos
     const novalista = []
     for (let i = 0; i < listaprod.length; i++) {
@@ -46,7 +46,7 @@ function PegarItens(ListaDeProdutos: any): Array<Produto> {
     }
     return novalista
 }
-export function PegarCapa(json: any): Nfe {
+export function PegarCapa(json: any): INfe {
     const Total = json.nfeProc.NFe.infNFe.total.ICMSTot;
     const IDE = json.nfeProc.NFe.infNFe.ide;
     return {

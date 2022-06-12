@@ -1,6 +1,6 @@
-import { Produto } from "./produto.entity";
+import { IProduto } from "./produto.dto";
 
-export class Nfe {
+export interface INfe {
     numero: number;
     modelo: number;
     serie: number;
@@ -22,6 +22,6 @@ export class Nfe {
     vTotTrib: number;
     desconto: number;
     data_recebimento: Date;
-    produto: Array<Produto>;
+    produto: Array<IProduto>;
     emitente: String;
 }

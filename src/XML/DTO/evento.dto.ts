@@ -1,4 +1,4 @@
-export class Evento{
+export interface IEvento{
     numero: number;
         modelo:number;
         serie: number;
