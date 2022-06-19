@@ -1,3 +1,4 @@
+export const ormconfig = JSON.parse(`
 {
     "type": "postgres",
     "host":"kesavan.db.elephantsql.com",
@@ -12,3 +13,4 @@
         "migrationsDir": "src/database/migrations/"
     }
 }
+`)
