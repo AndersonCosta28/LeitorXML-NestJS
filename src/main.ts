@@ -7,9 +7,9 @@ import { recriar_pastas } from './utils/function.utils';
 const { rota_extraido, rota_upload } = constantsUtils
 
 async function bootstrap() {
-  const { cors, swagger } = constantsUtils
+  const { cors, swagger, httpsOptions } = constantsUtils
   const port = process.env.PORT || 8080
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {httpsOptions});
   const document = SwaggerModule.createDocument(app, swagger.config);
 
   app.enableCors(cors.options)

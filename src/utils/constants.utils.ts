@@ -1,5 +1,6 @@
 import { DocumentBuilder } from "@nestjs/swagger";
 import { dirname, join } from "path"
+import { readFileSync } from "fs"
 
 const currentDir = dirname('./')
 const constantsUtils =  {
@@ -24,6 +25,10 @@ const constantsUtils =  {
                 .addBearerAuth({ type: 'http', scheme: 'bearer', bearerFormat: 'JWT', name: 'JWT', in: 'header' }, 'access-token') // Definir para para quem for usar a anotação @ApiBearerAuth('access-token') no controller. Fonte: https://stackoverflow.com/questions/54802832/is-it-possible-to-add-authentication-to-access-to-nestjs-swagger-explorer
                 .build();
         }
+    },
+    httpsOptions: {
+        key: readFileSync(join(currentDir, 'private.pem')),
+        cert: readFileSync(join(currentDir, 'cert.pem'))
     }
 }
 export default constantsUtils;
